@@ -13,4 +13,4 @@ app.use('/autenticacao', rotas_autenticacao)
 app.use('/usuario', rotas_autenticacao)
 
 
-app.listen(8000);
+app.listen(8081);
