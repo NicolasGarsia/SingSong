@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken'
 
 const registroFuncao = async (req, res) => {
     try {
-        const { nome, sobrenome, dataNascimento, email, senha } = req.body
-        if (!nome || !sobrenome || !dataNascimento || !email || !senha) {
+        const { nome, dataNascimento, email, senha } = req.body
+        if (!nome || !dataNascimento || !email || !senha) {
             return res.status(406).send({ message: 'Preencha todos os campos' })
         }
 
@@ -16,7 +16,6 @@ const registroFuncao = async (req, res) => {
         const senhaSegura = bcryptjs.hashSync(senha, 10)
         const novoUsuario = new User({
             nome: nome,
-            sobrenome: sobrenome,
             email: email,
             senha: senhaSegura,
             dataNascimento: dataNascimento
@@ -38,12 +37,12 @@ const registroFuncao = async (req, res) => {
         }
         const usuario = await User.findOne({ where: { email: email } })
         if (!usuario) {
-            res.send('este email não está cadastrado')
+            res.status(406).send('este email não está cadastrado')
             return
         }
         const senhaCorreta = bcryptjs.compareSync(senha, usuario.senha)
         if (!senhaCorreta) {
-            res.send('a senha está incorreta')
+            res.status(404).send('a senha está incorreta')
             return
         }
         const token = jwt.sign(
@@ -56,7 +55,7 @@ const registroFuncao = async (req, res) => {
             {expiresIn:"30 days"}
         )
 
-        res.send({msg:'voce foi logado', token: token})
+        res.status(200).send({msg:'voce foi logado', token: token})
 
     } catch (erro) {
         console.log(erro)

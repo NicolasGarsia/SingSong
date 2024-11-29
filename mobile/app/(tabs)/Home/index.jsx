@@ -1,11 +1,10 @@
 import React from 'react'; 
 import { View, Text, StyleSheet, TextInput, Image, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import { useNavigation } from '@react-navigation/native';
+import { Link, useRouter } from 'expo-router';
 
 const Home = () => {
-  const navigation = useNavigation();
+  const router = useRouter()
 
   const featuredPlaylists = [
     { id: 1, name: '20 Ligações', image: 'https://i.scdn.co/image/ab67616d0000b2739ba77e3ca38205c4dbfc5e8b' },
@@ -42,7 +41,7 @@ const Home = () => {
       <Text style={styles.sectionTitle}>Artistas Populares</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollSection}>
         {popularArtists.map((artist, index) => (
-          <Pressable key={index} onPress={() => navigation.navigate('Artist', { name: artist.name, image: artist.image })}>
+          <Pressable key={index} onPress={() => ('Artist', { name: artist.name, image: artist.image })}>
             <View style={styles.artistCardContainer}>
               <Image style={styles.artistCard} source={{ uri: artist.image }} />
               <Text style={styles.artistName}>{artist.name}</Text>
@@ -57,7 +56,7 @@ const Home = () => {
           <Pressable
             key={playlist.id}
             style={styles.featuredCard}
-            onPress={() => navigation.navigate('Player', { name: playlist.name, image: playlist.image })}
+            onPress={() => ('Player', { name: playlist.name, image: playlist.image })}
           >
             <Image source={{ uri: playlist.image }} style={styles.featuredImage} />
             <Text style={styles.featuredText}>{playlist.name}</Text>
@@ -71,7 +70,7 @@ const Home = () => {
           <Pressable
             key={index}
             style={styles.playlistCard}
-            onPress={() => navigation.navigate('Playlist', { name: album.name })}
+            onPress={() => ('Playlist', { name: album.name })}
           >
             <Image source={{ uri: album.image }} style={styles.playlistImage} />
             <Text style={styles.playlistText}>{album.name}</Text>

@@ -8,7 +8,7 @@ export default function App() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
-    const handleRegister = () => {
+    const handleRegister = async() => {
         if (!nome || !nascimento || !email || !senha) {
             return alert('Todos os campos devem ser preenchidos');
         }
@@ -16,7 +16,7 @@ export default function App() {
         const formData = { nome: nome, nascimento: nascimento, email: email, senha: senha };
 
         try {
-            const res = fetch("http://localhost:8000/registro", {
+            const res = await fetch("http://localhost:8000/autenticacao/registro", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -24,12 +24,12 @@ export default function App() {
                 },
                 body: JSON.stringify(formData),
             });
+        console.log(res.status)
             switch (res.status) {
                 case 201:
                     alert("Usuário criado");
                     break;
                 case 406:
-                    alert("Preencha todos os campos");
                     break;
                 case 418:
                     alert("Email já cadastrado");
@@ -84,9 +84,11 @@ export default function App() {
                         value={senha}
                         onChangeText={(text) => setSenha(text)}
                     />
+                    <Link href="/">
                     <TouchableOpacity style={styles.botao} onPress={handleRegister}>
                         <Text style={styles.textoBotao}>Cadastre-se</Text>
                     </TouchableOpacity>
+                    </Link>
                 </View>
 
                 <View style={styles.containerCadastro}>
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,  
         fontSize: 14, 
         backgroundColor: 'grey',
-        color: '#FF4500',
+        color: '#FFffff',
     },
     botao: {
         backgroundColor: '#a80453',

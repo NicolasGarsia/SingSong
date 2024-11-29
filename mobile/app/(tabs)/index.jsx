@@ -7,15 +7,15 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async() => {
     if (!email || !password) {
       return alert('Todos os campos devem ser preenchidos');
     }
 
-    const formData = { email: email, password: password };
+    const formData = { email: email, senha: password };
 
     try {
-      const res = fetch("http://localhost:8081/login", {
+      const res = await fetch("http://localhost:8000/autenticacao/login", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -23,16 +23,21 @@ export default function App() {
         },
         body: JSON.stringify(formData),
       });
+      console.log(res.status)
       switch (res.status) {
-        case 2010:
-          alert("ok");
-          console.log(res.token)
+        case 200:
+          alert("Logado com sucesso");
+          const result = await res.json()
+          console.log(result.token)
           break;
-        case 406:
+        case 400:
           alert("Preencha todos os campos");
           break;
-        case 418:
+        case 406:
           alert("Email já cadastrado");
+          break;
+        case 404:
+          alert("senha incorreta");
           break;
         default:
           alert("Erro ao se conectar com servidor");
@@ -40,7 +45,6 @@ export default function App() {
       }
     } catch (error) {
       console.error(error);
-      alert("Erro de conexão");
     }
   };
 
@@ -70,11 +74,11 @@ export default function App() {
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
-          
+          <Link href="/Home">
           <TouchableOpacity style={styles.botao} onPress={handleLogin}>
             <Text style={styles.textoBotao}>Entrar</Text>
           </TouchableOpacity>
-
+          </Link>
           <View style={styles.containerCadastro}>
             <Text style={styles.textoCadastro}>Tu não tem conta ainda?</Text>
             <Link href="/Cadastro">
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     backgroundColor: 'grey',
-    color: '#FF4500',
+    color: '#FFffff',
   },
   botao: {
     backgroundColor: '#a80453',

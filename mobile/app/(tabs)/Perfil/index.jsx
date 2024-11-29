@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput, Alert, TouchableOpacity, Modal } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 export default function TelaPerfil() {
-  const navigation = useNavigation();
+  const router = useRouter()
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -45,7 +45,7 @@ export default function TelaPerfil() {
 
   const buscarDadosUsuario = async () => {
     try {
-      const response = await fetch('http://192.168.0.100:8081/get.users', {
+      const response = await fetch('http://192.168.0.100:8000/get.users', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -106,8 +106,7 @@ export default function TelaPerfil() {
   };
 
   const sair = () => {
- 
-    navigation.navigate('/');
+    router.push('/Home')
   };
 
   useEffect(() => {

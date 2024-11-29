@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 const sequelize = new Sequelize(
-    'spotfake',
+    'singsong',
     'postgres',
     'postgres',
     {
@@ -15,10 +15,6 @@ const sequelize = new Sequelize(
 
 const User = sequelize.define('user', {
     nome: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
-    },
-    sobrenome: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },
