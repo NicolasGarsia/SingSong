@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 export default function TelaPerfil() {
   const router = useRouter()
 
-  const [nome, setNome] = useState('');
+  const [nome, setNome] = useState('Nicolas');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [imagemPerfil, setImagemPerfil] = useState(null);
