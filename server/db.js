@@ -11,8 +11,6 @@ const sequelize = new Sequelize(
     }
 )
 
-
-
 const User = sequelize.define('user', {
     nome: {
         type: Sequelize.DataTypes.STRING,

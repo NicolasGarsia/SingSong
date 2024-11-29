@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, SafeAreaView, Image, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
-import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async() => {
+  const handleLogin = async () => {
     if (!email || !password) {
       return alert('Todos os campos devem ser preenchidos');
     }
@@ -27,8 +26,8 @@ export default function App() {
       switch (res.status) {
         case 200:
           alert("Logado com sucesso");
-          const result = await res.json()
-          console.log(result.token)
+          const result = await res.json();
+          console.log(result.token);
           break;
         case 400:
           alert("Preencha todos os campos");
@@ -37,10 +36,9 @@ export default function App() {
           alert("Email já cadastrado");
           break;
         case 404:
-          alert("senha incorreta");
+          alert("Senha incorreta");
           break;
         default:
-          alert("Erro ao se conectar com servidor");
           break;
       }
     } catch (error) {
@@ -52,7 +50,10 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cabecalho}>
-          <Image source={{ uri: 'https://static.vecteezy.com/system/resources/previews/007/058/885/non_2x/modern-fire-flame-music-notes-for-hot-song-logo-design-vector.jpg' }} style={styles.imagem} />
+          <Image
+            source={{ uri: 'https://static.vecteezy.com/system/resources/previews/007/058/885/non_2x/modern-fire-flame-music-notes-for-hot-song-logo-design-vector.jpg' }}
+            style={styles.imagem}
+          />
           <Text style={styles.textoCabecalho}>Sing Song</Text>
           <Text style={styles.textoSubCabecalho}>Venha ouvir sua música favorita!</Text>
         </View>
@@ -95,12 +96,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
-    paddingBottom: 20,
   },
   cabecalho: {
     alignItems: 'center',
@@ -110,19 +113,23 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#FF1493',
+    textAlign: 'center',
   },
   textoSubCabecalho: {
     fontSize: 16,
     color: '#FF4500',
     marginTop: 10,
+    textAlign: 'center',
   },
   formulario: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 350,
     alignSelf: 'center',
     paddingHorizontal: 20,
+    alignItems: 'center',
   },
   input: {
+    width: '100%',
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
@@ -131,17 +138,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     backgroundColor: 'grey',
-    color: '#FFffff',
+    color: '#fff',
   },
   botao: {
     backgroundColor: '#a80453',
-    height: 50,
-    width: '80%',          
+    height: 45,
+    width: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,   
-    alignSelf: 'center',  
-    marginTop: 20,      
+    borderRadius: 10,
+    marginTop: 20,
   },
   textoBotao: {
     color: '#fff',
@@ -162,7 +168,6 @@ const styles = StyleSheet.create({
     color: '#FF1493',
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 5,
   },
   imagem: {
     width: 150,

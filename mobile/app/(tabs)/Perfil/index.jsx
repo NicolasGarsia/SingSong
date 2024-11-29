@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   botao: {
-    backgroundColor: '#FF4500',
+    backgroundColor: '#a80453',
     paddingVertical: 12,
     paddingHorizontal: 25,
     marginBottom:10,
