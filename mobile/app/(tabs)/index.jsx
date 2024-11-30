@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, SafeAreaView, Image, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
 
+
 export default function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     if (!email || !password) {
-      return alert('Todos os campos devem ser preenchidos');
+      return alert("Todos os campos devem ser preenchidos");
     }
 
     const formData = { email: email, senha: password };
-
     try {
       const res = await fetch("http://localhost:8000/autenticacao/login", {
         method: "POST",
@@ -22,29 +22,34 @@ export default function App() {
         },
         body: JSON.stringify(formData),
       });
-      console.log(res.status)
+
+      const data = await res.json()
       switch (res.status) {
         case 200:
-          alert("Logado com sucesso");
-          const result = await res.json();
-          console.log(result.token);
-          break;
-        case 400:
-          alert("Preencha todos os campos");
+          alert("Usuario logado");
+          console.log(data)
+          localStorage.setItem("id", data.id);
+          let testeID = localStorage.getItem('id')
+          console.log(testeID);
+          router.push("/Home");
           break;
         case 406:
-          alert("Email já cadastrado");
+          alert("Preencha todos os campos");
           break;
         case 404:
+          alert("Email não encontrado");
+          break;
+        case 400:
           alert("Senha incorreta");
           break;
+
         default:
+          alert("Erro ao se conectar com servidor");
           break;
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,13 +76,13 @@ export default function App() {
             style={styles.input}
             placeholder="Senha"
             placeholderTextColor="#fff"
-            secureTextEntry
+            secureTextEntry={true}
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
           <Link href="/Home">
           <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-            <Text style={styles.textoBotao}>Entrar</Text>
+            <Text style={styles.textoBotao} >Entrar</Text>
           </TouchableOpacity>
           </Link>
           <View style={styles.containerCadastro}>

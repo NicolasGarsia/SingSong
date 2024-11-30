@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 export default function TelaPerfil() {
   const router = useRouter()
 
-  const [nome, setNome] = useState('Nicolas');
+  const [nome, setNome] = useState(' Nicolas ');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
   const [imagemPerfil, setImagemPerfil] = useState(null);
@@ -14,6 +14,32 @@ export default function TelaPerfil() {
   const [modalVisivel, setModalVisivel] = useState(false);
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  let [user, setUser] = useState("");
+  //let [image, setImage] = useState("");
+
+
+  useEffect(() => {
+    try {
+      let id = localStorage.getItem("id");
+      console.log(id);
+      const res = fetch(`http://localhost:8000/usuario/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data.message);
+          console.log(user);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      uploadCloudinary();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user.imagem_perfil]);
 
   const enviarImagem = async (uriImagem) => {
     try {
@@ -97,13 +123,20 @@ export default function TelaPerfil() {
   };
 
   const alterarSenha = () => {
-    if (novaSenha === confirmarSenha) {
-      Alert.alert('Sucesso', 'Senha alterada com sucesso!');
-      setModalVisivel(false);
-    } else {
-      Alert.alert('Erro', 'As senhas não coincidem.');
+    if (!novaSenha || !confirmarSenha) {
+      return Alert.alert('Erro', 'Preencha todos os campos.');
     }
+  
+    if (novaSenha !== confirmarSenha) {
+      return Alert.alert('Erro', 'As senhas não coincidem.');
+    }
+  
+    Alert.alert('Sucesso', 'Senha alterada com sucesso!');
+    setNovaSenha('');
+    setConfirmarSenha('');
+    setModalVisivel(false);
   };
+  
 
   const sair = () => {
     router.push('/Home')
@@ -113,6 +146,37 @@ export default function TelaPerfil() {
     buscarDadosUsuario();
   }, []);
 
+  // //async function uploadCloudinary() {
+  //   const data = { file: image, upload_preset: "ml_default" };
+  //   const res = await fetch(
+  //     "https://api.cloudinary.com/v1_1/demtbhzpa/upload",
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     }
+  //   );
+  //   let response = await res.json();
+  //   console.log(response);
+  //   const data2 = { email: user.email, url: response.url };
+  //   const res2 = await fetch(
+  //     `http://localhost:8000/usuario/${user.email}/updateImagem`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-type": "application/json",
+  //       },
+  //       body: JSON.stringify(data2),
+  //     }
+  //   );
+  //   let response2 = await res2.json();
+  //   console.log(response2);
+  // }
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bloco}>
@@ -137,7 +201,7 @@ export default function TelaPerfil() {
           </View>
 
           <View style={styles.corpoPerfil}>
-            <Text style={styles.tituloBio}>Biografia</Text>
+            <Text style={styles.tituloBio}>Bio</Text>
             {editando ? (
               <TextInput
                 style={styles.inputBio}
@@ -184,9 +248,13 @@ export default function TelaPerfil() {
               value={confirmarSenha}
               onChangeText={setConfirmarSenha}
             />
-            <TouchableOpacity onPress={alterarSenha} style={styles.botao}>
-              <Text style={styles.textoBotao}>Confirmar</Text>
-            </TouchableOpacity>
+<TouchableOpacity
+  onPress={() => window.alert('Troca de senha concluída.')}
+  style={styles.botao}
+>
+  <Text style={styles.textoBotao}>Confirmar</Text>
+</TouchableOpacity>
+
             <TouchableOpacity onPress={() => setModalVisivel(false)} style={styles.botao}>
               <Text style={styles.textoBotao}>Cancelar</Text>
             </TouchableOpacity>

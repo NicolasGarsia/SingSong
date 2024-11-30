@@ -1,10 +1,63 @@
+import Express from "express";
+import { User, criarTabelas } from "../db.js";
+import cors from 'cors'
 
+const app = Express();
+app.use(Express.json());
+app.use(cors())
 
-const pegar_usuario_funcao =(req, res)=>{
-    const id_requisicao = req.params.id
-    console.log('o id enviado foi', id_requisicao)
-    res.send(true)
-    return
+const get_user = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) {
+            console.log('Erro ao definir usuario')
+        }
+        const user = await User.findOne({ where: { id: id } })
+        res.status(200).send({ message: user })
+        return user
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-export{pegar_usuario_funcao}
+const updateImagem = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const url = req.body.url;
+        if (!email || !url) {
+            return res.status(400).send({ message: 'Email e URL da imagem são obrigatórios.' });
+        }
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return res.status(404).send({ message: 'Usuário não encontrado.' });
+        }
+        user.imagem_perfil = url;
+        await user.save(); 
+        res.status(200).send({ message: 'Imagem de perfil atualizada com sucesso.', user });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Erro ao atualizar a imagem de perfil.' });
+    }
+}
+
+const updatePassword = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const senha = req.body.senha;
+        if (!email || !senha) {
+            return res.status(400).send({ message: 'Email e senha são obrigatórios.' })
+        }
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) {
+            return res.status(404).send({ message: 'Usuário não encontrado.' });
+        }
+        user.senha = senha;
+        await user.save
+        res.status(200).send({ message: 'Senha atualizada com sucesso.', user });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Erro ao atualizar a senha.' });
+    }
+}
+
+export { get_user, updateImagem, updatePassword }

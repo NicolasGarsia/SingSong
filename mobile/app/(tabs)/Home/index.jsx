@@ -1,10 +1,37 @@
-import React from 'react'; 
-import { View, Text, StyleSheet, TextInput, Image, Pressable, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  Pressable,
+  ScrollView
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from 'expo-router';
+
 
 const Home = () => {
   const router = useRouter()
+  const [user, setUser] = useState("");
+
+
+  useEffect(() => {
+    try {
+      let id = localStorage.getItem("id");
+      console.log(id);
+      const res = fetch(`http://localhost:8000/usuario/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data.message);
+          console.log(data.message);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const featuredPlaylists = [
     { id: 1, name: '20 Ligações', image: 'https://i.scdn.co/image/ab67616d0000b2739ba77e3ca38205c4dbfc5e8b' },
@@ -24,16 +51,24 @@ const Home = () => {
     { name: 'Mix 2000', image: 'https://mixmag.com.br/assets/uploads/images/_full/50-Cent.jpeg' },
   ];
 
+
   return (
     <ScrollView style={styles.container}> 
       <View style={styles.topBar}>
-        <Link href="/Perfil">
+
+        {user ? (
+          <>
+            <Link href="/Perfil">
           <Ionicons name="person-circle-outline" size={28} color="#282828" />
         </Link>
-        
+          </>
+        ) : (
+          <></>
+        )}
+
         <TextInput
           style={styles.searchBar}
-          placeholder="O que você quer ouvir?"
+          placeholder="Pesquisar..."
           placeholderTextColor="#AFAFAF"
         />
       </View>
@@ -100,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     marginHorizontal: 10,
-    color: '#282828',
+    color: 'white',
     fontSize: 14,
   },
   sectionTitle: {
